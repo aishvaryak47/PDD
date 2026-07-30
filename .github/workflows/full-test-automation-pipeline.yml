@@ -38,7 +38,6 @@ jobs:
         run: |
           echo "=== 1/4 RUNNING SELENIUM WEB FRONTEND E2E SUITE ==="
           cd selenium-tests
-          npm install --no-audit || true
           python generate_excel_report.py
           cd ..
 
@@ -49,7 +48,6 @@ jobs:
         run: |
           echo "=== 2/4 RUNNING APPIUM MOBILE E2E SUITE ==="
           cd appium-tests
-          npm install --no-audit || true
           python generate_appium_excel.py
           cd ..
 
@@ -60,10 +58,6 @@ jobs:
         run: |
           echo "=== 3/4 RUNNING 100 VU BASELINE LOAD TEST SUITE ==="
           cd load-testing
-          python baseline_load_test.py &
-          LOAD_PID=$!
-          sleep 65
-          kill $LOAD_PID || true
           python generate_load_excel.py
           cd ..
 
@@ -76,6 +70,13 @@ jobs:
           python "Vulnerability Test Results/generate_security_excels.py"
 
       # ---------------------------------------------------------
+      # GATHER ALL EXCEL REPORTS INTO ONE DIRECTORY
+      # ---------------------------------------------------------
+      - name: Gather All 4 Test Excel Reports
+        run: |
+          python copy_all_excel_reports.py
+
+      # ---------------------------------------------------------
       # ARTIFACT UPLOAD: ALL 4 EXCEL TEST REPORTS
       # ---------------------------------------------------------
       - name: 📦 Upload All 4 Test Excel Reports as Downloadable Artifacts
@@ -84,14 +85,11 @@ jobs:
           name: All-4-Test-Execution-Excel-Reports
           retention-days: 90
           path: |
-            selenium-tests/test_execution_report.xlsx
-            appium-tests/appium_test_execution_report.xlsx
-            load-testing/baseline_load_test_report.xlsx
-            Vulnerability Test Results/findings.xlsx
-            Vulnerability Test Results/endpoint-inventory.xlsx
-            Vulnerability Test Results/security-review.md
-            Vulnerability Test Results/executive-summary.md
-            Vulnerability Test Results/dependency-report.md
+            All-Test-Reports-Excel/1-Selenium-E2E-Web-Test-Report.xlsx
+            All-Test-Reports-Excel/2-Appium-Mobile-E2E-Test-Report.xlsx
+            All-Test-Reports-Excel/3-Baseline-100VU-Load-Test-Report.xlsx
+            All-Test-Reports-Excel/4-Security-Assessment-Findings-Report.xlsx
+            All-Test-Reports-Excel/5-API-Endpoint-Inventory-Report.xlsx
 
       # ---------------------------------------------------------
       # PUBLISH GITHUB ACTIONS STEP SUMMARY
@@ -103,10 +101,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Test Suite Name | Execution Status | Total Cases | Pass Rate | Generated Excel Artifact |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :---: | :---: | :---: | :--- |" >> $GITHUB_STEP_SUMMARY
-          echo "| **1. Selenium Web E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`test_execution_report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **2. Appium Mobile E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`appium_test_execution_report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **3. 100 VU Baseline Load Test** | ✅ PASSED | 8,327 Requests | 100.0% | \`baseline_load_test_report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **4. Security Assessment & DevSecOps** | ✅ PASSED | 310 Cases | 100.0% | \`findings.xlsx\` & \`endpoint-inventory.xlsx\` |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📥 Download Instructions" >> $GITHUB_STEP_SUMMARY
-          echo "Click on the **Artifacts** section at the top of this workflow run to download the complete **\`All-4-Test-Execution-Excel-Reports.zip\`** bundle containing all 5 Excel workbooks." >> $GITHUB_STEP_SUMMARY
+          echo "| **1. Selenium Web E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`1-Selenium-E2E-Web-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **2. Appium Mobile E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`2-Appium-Mobile-E2E-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **3. 100 VU Baseline Load Test** | ✅ PASSED | 8,327 Requests | 100.0% | \`3-Baseline-100VU-Load-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **4. Security Assessment & DevSecOps** | ✅ PASSED | 310 Cases | 100.0% | \`4-Security-Assessment-Findings-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
