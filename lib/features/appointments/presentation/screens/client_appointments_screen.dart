@@ -125,7 +125,6 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen> {
         final therapist = apt['therapistName'] ?? 'Dr. Practitioner';
         final type = apt['type'] ?? 'CBT Consultation';
         final time = apt['time'] ?? 'Scheduled';
-        final price = apt['price'] ?? '\$120.00';
         final status = apt['status'] ?? 'Confirmed';
 
         return Container(

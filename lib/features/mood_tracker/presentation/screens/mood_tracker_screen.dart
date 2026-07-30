@@ -84,7 +84,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
     }
 
     while (spots.length < 7) {
-      spots.insert(0, FlSpot(0, 3.0));
+      spots.insert(0, const FlSpot(0, 3.0));
       for (int k = 0; k < spots.length; k++) {
         spots[k] = FlSpot(k.toDouble(), spots[k].y);
       }
