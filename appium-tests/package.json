@@ -1,0 +1,14 @@
+{
+  "name": "psynova-appium-tests",
+  "version": "1.0.0",
+  "description": "Appium Mobile & App Frontend End-to-End Test Suite for PSYNOVA AI",
+  "main": "tests/appium-tests.js",
+  "scripts": {
+    "test": "node tests/appium-tests.js"
+  },
+  "dependencies": {
+    "webdriverio": "^8.32.0",
+    "appium": "^2.5.1",
+    "@appium/doctor": "^1.16.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "target_url": "http://127.0.0.1:8000/api/v1/therapists",
+  "vus": 100,
+  "duration_seconds": 60.69,
+  "total_requests": 8327,
+  "success_count": 8327,
+  "error_count": 0,
+  "rps": 137.2,
+  "min_ms": 47.32,
+  "avg_ms": 116.01,
+  "max_ms": 1438.54,
+  "p95_ms": 172.44,
+  "p99_ms": 296.73
+}

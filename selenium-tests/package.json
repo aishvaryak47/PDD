@@ -1,0 +1,13 @@
+{
+  "name": "psynova-selenium-tests",
+  "version": "1.0.0",
+  "description": "Selenium WebDriver End-to-End Test Suite for PSYNOVA AI Web Frontend",
+  "main": "tests/login-tests.js",
+  "scripts": {
+    "test": "node tests/login-tests.js"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.18.1",
+    "chromedriver": "^122.0.0"
+  }
+}
