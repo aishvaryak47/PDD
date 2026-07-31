@@ -77,18 +77,14 @@ jobs:
           python copy_all_excel_reports.py
 
       # ---------------------------------------------------------
-      # ARTIFACT UPLOAD: ALL 4 NAMED EXCEL TEST REPORTS
+      # ARTIFACT UPLOAD: SECURITY ASSESSMENT FOLDER WITH ALL 4 EXCEL REPORTS
       # ---------------------------------------------------------
-      - name: 📦 Upload All 4 Named Test Excel Reports as Downloadable Artifacts
+      - name: 📦 Upload Security Assessment Folder (All 4 Excel Test Reports)
         uses: actions/upload-artifact@v4
         with:
-          name: All-4-Test-Execution-Excel-Reports
+          name: Security-Assessment
           retention-days: 90
-          path: |
-            All-Test-Reports-Excel/Selenium-Web-E2E-Test-Report.xlsx
-            All-Test-Reports-Excel/Appium-Mobile-E2E-Test-Report.xlsx
-            All-Test-Reports-Excel/Baseline-100VU-Load-Test-Report.xlsx
-            All-Test-Reports-Excel/Security-Assessment-Test-Report.xlsx
+          path: Security-Assessment/
 
       # ---------------------------------------------------------
       # PUBLISH GITHUB ACTIONS STEP SUMMARY

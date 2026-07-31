@@ -3,12 +3,13 @@ import shutil
 
 def copy_reports():
     base_dir = os.path.dirname(__file__)
-    out_dir = os.path.join(base_dir, "All-Test-Reports-Excel")
+    sec_folder = os.path.join(base_dir, "Security-Assessment")
+    all_reports_dir = os.path.join(base_dir, "All-Test-Reports-Excel")
     
-    # Clear directory to ensure no old names remain
-    if os.path.exists(out_dir):
-        shutil.rmtree(out_dir)
-    os.makedirs(out_dir, exist_ok=True)
+    for d in [sec_folder, all_reports_dir]:
+        if os.path.exists(d):
+            shutil.rmtree(d)
+        os.makedirs(d, exist_ok=True)
 
     mappings = [
         ("selenium-tests/test_execution_report.xlsx", "Selenium-Web-E2E-Test-Report.xlsx"),
@@ -19,10 +20,10 @@ def copy_reports():
 
     for src_rel, dest_name in mappings:
         src_path = os.path.join(base_dir, src_rel)
-        dest_path = os.path.join(out_dir, dest_name)
         if os.path.exists(src_path):
-            shutil.copy2(src_path, dest_path)
-            print(f"Named Excel Report: {dest_name}")
+            shutil.copy2(src_path, os.path.join(sec_folder, dest_name))
+            shutil.copy2(src_path, os.path.join(all_reports_dir, dest_name))
+            print(f"Copied {dest_name} to Security-Assessment folder.")
         else:
             print(f"Warning: {src_path} does not exist!")
 
