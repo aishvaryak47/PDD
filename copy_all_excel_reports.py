@@ -15,7 +15,7 @@ def copy_reports():
         ("selenium-tests/test_execution_report.xlsx", "Selenium-Web-E2E-Test-Report.xlsx"),
         ("appium-tests/appium_test_execution_report.xlsx", "Appium-Mobile-E2E-Test-Report.xlsx"),
         ("load-testing/baseline_load_test_report.xlsx", "Baseline-100VU-Load-Test-Report.xlsx"),
-        ("Vulnerability Test Results/findings.xlsx", "Security-Assessment-Test-Report.xlsx"),
+        ("Vulnerability Test Results/findings.xlsx", "Vulnerability-Test-Report.xlsx"),
     ]
 
     for src_rel, dest_name in mappings:
