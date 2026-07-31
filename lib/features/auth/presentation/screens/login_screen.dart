@@ -52,7 +52,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isTherapist = widget.role == 'therapist';
 
     return Scaffold(
-      appBar: AppBar(title: Text(isTherapist ? 'Therapist Login' : 'Client Login')),
+      appBar: AppBar(
+        title: Text(isTherapist ? 'Therapist Login' : 'Client Login'),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              context.go('/login?role=${isTherapist ? 'client' : 'therapist'}');
+            },
+            icon: Icon(
+              isTherapist ? Icons.person_outline : Icons.medical_services_outlined,
+              size: 18,
+              color: isTherapist ? AppColors.primaryIndigo : AppColors.primaryPurple,
+            ),
+            label: Text(
+              isTherapist ? 'Client Portal' : 'Therapist Portal',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isTherapist ? AppColors.primaryIndigo : AppColors.primaryPurple,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -61,6 +83,54 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const SizedBox(height: 10),
+                // Prominent Role Banner / Switcher
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: (isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: (isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo).withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            isTherapist ? Icons.medical_services_outlined : Icons.person_outline,
+                            color: isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            isTherapist ? 'Therapist Mode' : 'Client Mode',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo,
+                            ),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          context.go('/login?role=${isTherapist ? 'client' : 'therapist'}');
+                        },
+                        child: Text(
+                          isTherapist ? 'Switch to Client Login' : 'Switch to Therapist Login',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                            color: isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Icon(
                   isTherapist ? Icons.medical_services_rounded : Icons.person_rounded,
@@ -83,7 +153,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 CustomTextField(
                   controller: _emailController,
                   labelText: 'Email Address',
-                  hintText: isTherapist ? 'e.g. aishu@psynova.com' : 'e.g. client@gmail.com',
+                  hintText: isTherapist ? 'e.g. aishu@psynova.com or dr.jenkins@psynova.com' : 'e.g. client@gmail.com',
                   prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   validator: (val) => val == null || val.trim().isEmpty ? 'Please enter your email' : null,
@@ -109,13 +179,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: const Text('Forgot Password?'),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
                 CustomButton(
-                  text: 'Sign In',
+                  text: isTherapist ? 'Sign In as Therapist' : 'Sign In as Client',
                   isLoading: authState.isLoading,
                   onPressed: _handleLogin,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      context.go('/login?role=${isTherapist ? "client" : "therapist"}');
+                    },
+                    child: Text(
+                      isTherapist
+                          ? 'Are you a Client? Click here to switch to Client Login'
+                          : 'Are you a Therapist? Click here for Therapist Login',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isTherapist ? AppColors.primaryIndigo : AppColors.primaryPurple,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -129,8 +217,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         }
                       },
                       child: Text(
-                        'Register Now',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo),
+                        isTherapist ? 'Register as Therapist' : 'Register Now',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isTherapist ? AppColors.primaryPurple : AppColors.primaryIndigo),
                       ),
                     ),
                   ],
