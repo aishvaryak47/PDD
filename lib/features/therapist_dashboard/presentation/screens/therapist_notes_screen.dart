@@ -21,7 +21,7 @@ class _TherapistNotesScreenState extends ConsumerState<TherapistNotesScreen> {
   final TextEditingController _planController = TextEditingController();
 
   bool _isSaving = false;
-  String _selectedClient = 'Alex Morgan';
+  String _selectedClient = '';
   List<Map<String, dynamic>> _savedNotes = [];
 
   @override
@@ -188,14 +188,22 @@ class _TherapistNotesScreenState extends ConsumerState<TherapistNotesScreen> {
   Widget build(BuildContext context) {
     final activeClients = ref.watch(activeClientsProvider);
 
-    // Build dynamic client list from real active clients
-    final List<String> clientList = activeClients.map((c) => c.name).toList();
-    if (!clientList.contains('Alex Morgan')) {
-      clientList.add('Alex Morgan');
+    // Build dynamic client list strictly from real active clients and saved records (no static placeholders)
+    final Set<String> dynamicClients = activeClients.map((c) => c.name).toSet();
+    for (final note in _savedNotes) {
+      if (note['clientName'] != null && (note['clientName'] as String).isNotEmpty) {
+        dynamicClients.add(note['clientName'] as String);
+      }
     }
 
-    if (!clientList.contains(_selectedClient)) {
-      _selectedClient = clientList.first;
+    final List<String> clientList = dynamicClients.toList();
+
+    if (clientList.isNotEmpty) {
+      if (!clientList.contains(_selectedClient)) {
+        _selectedClient = clientList.first;
+      }
+    } else {
+      _selectedClient = 'No Active Client Selected';
     }
 
     return Scaffold(

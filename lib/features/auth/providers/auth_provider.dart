@@ -100,7 +100,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
               : 'Dr. ${formattedName.isNotEmpty ? formattedName : "Specialist"}')
           : (formattedName.isNotEmpty ? formattedName : 'Active Client');
 
-      final userId = '${isTherapist ? "therapist" : "client"}-${DateTime.now().millisecondsSinceEpoch % 10000}';
+      final sanitizedEmail = email.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+      final userId = '${isTherapist ? "therapist" : "client"}-$sanitizedEmail';
 
       final mockUser = UserModel(
         id: userId,
@@ -184,7 +185,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return true;
     } catch (e) {
-      final userId = 'client-${DateTime.now().millisecondsSinceEpoch % 10000}';
+      final sanitizedEmail = email.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+      final userId = 'client-$sanitizedEmail';
       final mockUser = UserModel(
         id: userId,
         email: email,
@@ -263,7 +265,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       return true;
     } catch (e) {
-      final userId = 'therapist-${DateTime.now().millisecondsSinceEpoch % 10000}';
+      final sanitizedEmail = email.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+      final userId = 'therapist-$sanitizedEmail';
       final mockUser = UserModel(
         id: userId,
         email: email,
