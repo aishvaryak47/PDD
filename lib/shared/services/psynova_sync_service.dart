@@ -66,7 +66,7 @@ class PsynovaSyncService {
           rating: (item['rating'] as num?)?.toDouble() ?? 5.0,
           reviews: (item['reviews'] as num?)?.toInt() ?? 12,
           address: item['address'] ?? 'Online Clinical Suite',
-          biography: item['biography'] ?? 'Licensed clinical therapist offering Cognitive Behavioral Therapy, anxiety resilience, and mental wellness consultations.',
+          biography: item['biography'] ?? 'Licensed clinical therapist offering CBT and emotional wellness consultations.',
           qualifications: item['qualifications'] != null
               ? List<String>.from(item['qualifications'])
               : const ['Psy.D in Clinical Psychology', 'Licensed CBT Specialist'],

@@ -54,7 +54,12 @@ class ActiveTherapistsNotifier extends StateNotifier<List<ActiveTherapist>> {
   bool _hasDiff(List<ActiveTherapist> newList) {
     if (newList.length != state.length) return true;
     for (int i = 0; i < newList.length; i++) {
-      if (newList[i].id != state[i].id || newList[i].name != state[i].name) return true;
+      if (newList[i].id != state[i].id ||
+          newList[i].name != state[i].name ||
+          newList[i].isOnline != state[i].isOnline ||
+          newList[i].title != state[i].title) {
+        return true;
+      }
     }
     return false;
   }
