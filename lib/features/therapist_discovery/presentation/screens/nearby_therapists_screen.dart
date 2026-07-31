@@ -34,9 +34,8 @@ class _NearbyTherapistsScreenState extends ConsumerState<NearbyTherapistsScreen>
           0,
           ActiveTherapist(
             id: user.id,
-            name: user.fullName.isNotEmpty ? (user.fullName.toLowerCase().startsWith('dr') ? user.fullName : 'Dr. ${user.fullName}') : 'Dr. Practitioner',
-            title: 'Licensed Clinical Specialist (Logged In)',
-            distance: '0.5 km away',
+            name: user.fullName.isNotEmpty ? (user.fullName.toLowerCase().startsWith('dr') ? user.fullName : 'Dr. ${user.fullName}') : 'Dr. Specialist',
+            title: 'Licensed Clinical Specialist (Active)',
             rate: '\$140 / hr',
             rating: 5.0,
             reviews: 12,
@@ -200,8 +199,8 @@ class _NearbyTherapistsScreenState extends ConsumerState<NearbyTherapistsScreen>
                                               Row(
                                                 children: [
                                                   const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                                                  Text(' ${t.rating} (${t.reviews}) • ', style: const TextStyle(fontSize: 12)),
-                                                  Text(t.distance, style: const TextStyle(color: AppColors.primaryIndigo, fontSize: 12, fontWeight: FontWeight.bold)),
+                                                  Text(' ${t.rating} (${t.reviews} Reviews) • ', style: const TextStyle(fontSize: 12)),
+                                                  Text(t.rate, style: const TextStyle(color: AppColors.primaryIndigo, fontSize: 12, fontWeight: FontWeight.bold)),
                                                 ],
                                               ),
                                             ],

@@ -126,7 +126,7 @@ class _TherapistDashboardScreenState
   Widget _buildHeroHeader(String? name, TherapistState state, TherapistNotifier notifier) {
     final displayName = (name != null && name.isNotEmpty)
         ? (name.toLowerCase().startsWith('dr') ? name : 'Dr. $name')
-        : 'Dr. Practitioner';
+        : 'Dr. Specialist';
 
     return Container(
       padding: const EdgeInsets.all(20),

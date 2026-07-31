@@ -40,37 +40,13 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen> {
 
   List<Map<String, dynamic>> _getFiltered(String status) {
     if (_appointments.isEmpty) {
-      if (status == 'Upcoming') {
-        return [
-          {
-            'id': 'default-1',
-            'therapistName': 'Dr. Sarah Jenkins',
-            'type': 'Cognitive Behavioral Therapy (50m)',
-            'time': 'Today, 4:00 PM',
-            'price': '\$120.00',
-            'status': 'Upcoming',
-          }
-        ];
-      } else if (status == 'Completed') {
-        return [
-          {
-            'id': 'default-2',
-            'therapistName': 'Dr. Michael Chen',
-            'type': 'Mindfulness Consultation',
-            'time': 'July 20, 2026',
-            'price': '\$140.00',
-            'status': 'Completed',
-          }
-        ];
-      }
       return [];
     }
 
     return _appointments.where((a) {
       final st = (a['status'] as String? ?? 'Upcoming').toLowerCase();
       if (status == 'Upcoming') return st == 'upcoming' || st == 'active';
-      if (status == 'Completed') return st == 'completed';
-      if (status == 'Cancelled') return st == 'cancelled' || st == 'rejected';
+      if (status == 'Previous') return st == 'completed' || st == 'cancelled' || st == 'rejected' || st == 'previous' || st == 'past';
       return false;
     }).toList();
   }
@@ -78,43 +54,64 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen> {
   @override
   Widget build(BuildContext context) {
     final upcomingList = _getFiltered('Upcoming');
-    final completedList = _getFiltered('Completed');
-    final cancelledList = _getFiltered('Cancelled');
+    final previousList = _getFiltered('Previous');
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Therapy Sessions'),
           bottom: const TabBar(
             tabs: [
-              Tab(text: 'Upcoming'),
-              Tab(text: 'Completed'),
-              Tab(text: 'Cancelled'),
+              Tab(text: 'Upcoming Sessions'),
+              Tab(text: 'Previous Sessions'),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             // Upcoming Sessions Tab
-            _buildSessionList(context, upcomingList, isUpcoming: true),
+            _buildSessionList(context, upcomingList, isUpcoming: true, emptyMsg: 'No upcoming therapy sessions.\nBook a consultation with an active therapist to get started!'),
 
-            // Completed Tab
-            _buildSessionList(context, completedList, isUpcoming: false),
-
-            // Cancelled Tab
-            cancelledList.isEmpty
-                ? const Center(child: Text('No cancelled sessions'))
-                : _buildSessionList(context, cancelledList, isUpcoming: false),
+            // Previous Sessions Tab
+            _buildSessionList(context, previousList, isUpcoming: false, emptyMsg: 'No previous therapy sessions found.'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSessionList(BuildContext context, List<Map<String, dynamic>> sessions, {required bool isUpcoming}) {
+  Widget _buildSessionList(BuildContext context, List<Map<String, dynamic>> sessions, {required bool isUpcoming, required String emptyMsg}) {
     if (sessions.isEmpty) {
-      return const Center(child: Text('No sessions found'));
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isUpcoming ? Icons.calendar_today_rounded : Icons.history_rounded,
+                size: 64,
+                color: AppColors.textSecondaryLight,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                emptyMsg,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: AppColors.textSecondaryLight, fontSize: 14, height: 1.4),
+              ),
+              if (isUpcoming) ...[
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.search_rounded),
+                  label: const Text('Find Nearby Therapists'),
+                  onPressed: () => context.push('/nearby-therapists'),
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
     }
 
     return ListView.builder(
@@ -122,7 +119,7 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen> {
       itemCount: sessions.length,
       itemBuilder: (context, index) {
         final apt = sessions[index];
-        final therapist = apt['therapistName'] ?? 'Dr. Practitioner';
+        final therapist = apt['therapistName'] ?? 'Licensed Specialist';
         final type = apt['type'] ?? 'CBT Consultation';
         final time = apt['time'] ?? 'Scheduled';
         final status = apt['status'] ?? 'Confirmed';
@@ -130,7 +127,7 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen> {
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           child: GlassContainer(
-            onTap: isUpcoming ? () => context.push('/video-consultation') : null,
+            onTap: isUpcoming ? () => context.push('/chat-detail/t-1') : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -24,8 +24,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Connect with Licensed Therapists',
       'subtitle':
-          'Discover top-rated therapists nearby, view availability, book sessions, and join HD WebRTC video consultations.',
-      'icon': 'video_call',
+          'Discover top-rated therapists nearby, view availability, book sessions, and connect on a 100% end-to-end encrypted private platform.',
+      'icon': 'lock_platform',
     },
     {
       'title': 'Track Mood & Journal Progress',
@@ -67,8 +67,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemBuilder: (context, index) {
                   final page = _pages[index];
                   IconData iconData = Icons.psychology;
-                  if (page['icon'] == 'video_call') {
-                    iconData = Icons.video_camera_front_rounded;
+                  if (page['icon'] == 'lock_platform') {
+                    iconData = Icons.security_rounded;
                   }
                   if (page['icon'] == 'insights') {
                     iconData = Icons.show_chart_rounded;

@@ -1,10 +1,5 @@
-// ignore_for_file: deprecated_member_use
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import '../providers/active_therapists_provider.dart';
 import '../providers/active_clients_provider.dart';
 
@@ -17,21 +12,13 @@ class PsynovaSyncService {
   static const String _journalsKey = 'psynova_journals_v3';
   static const String _soapNotesKey = 'psynova_soap_notes_v3';
 
-  // --- RAW STORAGE ACCESS (Bypasses SharedPreferences web memory cache) ---
+  // --- RAW STORAGE ACCESS ---
   static void _writeRaw(String key, String value) {
-    if (kIsWeb) {
-      try {
-        html.window.localStorage[key] = value;
-      } catch (_) {}
-    }
+    // SharedPreferences handles web and native storage safely
   }
 
   static String? _readRaw(String key) {
-    if (kIsWeb) {
-      try {
-        return html.window.localStorage[key];
-      } catch (_) {}
-    }
+    // SharedPreferences handles web and native storage safely
     return null;
   }
 
@@ -41,11 +28,14 @@ class PsynovaSyncService {
       'id': t.id,
       'name': t.name,
       'title': t.title,
-      'distance': t.distance,
       'rate': t.rate,
       'rating': t.rating,
       'reviews': t.reviews,
       'address': t.address,
+      'biography': t.biography,
+      'qualifications': t.qualifications,
+      'experienceYears': t.experienceYears,
+      'languages': t.languages,
       'isOnline': t.isOnline,
     }).toList();
     final jsonStr = jsonEncode(listJson);
@@ -70,13 +60,20 @@ class PsynovaSyncService {
         final List<dynamic> listJson = jsonDecode(raw);
         return listJson.map((item) => ActiveTherapist(
           id: item['id'] ?? '',
-          name: item['name'] ?? 'Dr. Practitioner',
+          name: item['name'] ?? 'Dr. Specialist',
           title: item['title'] ?? 'Licensed Specialist',
-          distance: item['distance'] ?? '0.8 km away',
           rate: item['rate'] ?? '\$140 / hr',
           rating: (item['rating'] as num?)?.toDouble() ?? 5.0,
           reviews: (item['reviews'] as num?)?.toInt() ?? 12,
           address: item['address'] ?? 'Online Clinical Suite',
+          biography: item['biography'] ?? 'Licensed clinical therapist offering Cognitive Behavioral Therapy, anxiety resilience, and mental wellness consultations.',
+          qualifications: item['qualifications'] != null
+              ? List<String>.from(item['qualifications'])
+              : const ['Psy.D in Clinical Psychology', 'Licensed CBT Specialist'],
+          experienceYears: (item['experienceYears'] as num?)?.toInt() ?? 8,
+          languages: item['languages'] != null
+              ? List<String>.from(item['languages'])
+              : const ['English', 'Spanish'],
           isOnline: item['isOnline'] ?? true,
         )).toList();
       } catch (_) {}
@@ -89,7 +86,6 @@ class PsynovaSyncService {
     final listJson = clients.map((c) => {
       'id': c.id,
       'name': c.name,
-      'distance': c.distance,
       'location': c.location,
       'requestedTopic': c.requestedTopic,
       'isUrgent': c.isUrgent,
@@ -119,8 +115,7 @@ class PsynovaSyncService {
         return listJson.map((item) => ActiveClient(
           id: item['id'] ?? '',
           name: item['name'] ?? 'Active Client',
-          distance: item['distance'] ?? '0.5 mi away',
-          location: item['location'] ?? 'Nearby Location',
+          location: item['location'] ?? 'Active Location',
           requestedTopic: item['requestedTopic'] ?? 'CBT Consultation',
           isUrgent: item['isUrgent'] ?? false,
           preferredTime: item['preferredTime'] ?? 'Flexible',

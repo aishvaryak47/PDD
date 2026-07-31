@@ -123,7 +123,7 @@ class _TherapistNearbyMapScreenState extends ConsumerState<TherapistNearbyMapScr
                                             ],
                                           ),
                                           const SizedBox(height: 2),
-                                          Text('${client.location} • ${client.distance}', style: const TextStyle(color: AppColors.textSecondaryLight, fontSize: 12)),
+                                          Text(client.location, style: const TextStyle(color: AppColors.textSecondaryLight, fontSize: 12)),
                                         ],
                                       ),
                                     ),

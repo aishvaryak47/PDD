@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../../../../shared/widgets/glass_container.dart';
 import '../../../../shared/services/psynova_sync_service.dart';
+import '../../../../shared/providers/active_therapists_provider.dart';
 import '../../../auth/providers/auth_provider.dart';
 import '../../../therapist_dashboard/presentation/providers/therapist_provider.dart';
 
@@ -37,6 +38,16 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
         ? user.fullName
         : (user?.email != null ? user!.email.split('@')[0] : "Client User");
 
+    final activeTherapists = ref.watch(activeTherapistsProvider);
+    ActiveTherapist? targetTherapist;
+    for (final t in activeTherapists) {
+      if (t.id == widget.therapistId || t.name.toLowerCase().contains(widget.therapistId.toLowerCase())) {
+        targetTherapist = t;
+        break;
+      }
+    }
+    final therapistName = targetTherapist?.name ?? (activeTherapists.isNotEmpty ? activeTherapists.first.name : 'Licensed Specialist');
+
     return Scaffold(
       appBar: AppBar(title: const Text('Book Therapy Session')),
       body: SafeArea(
@@ -48,23 +59,23 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const GlassContainer(
+                    GlassContainer(
                       child: Row(
                         children: [
-                          CircleAvatar(
+                          const CircleAvatar(
                               radius: 25,
                               backgroundColor: AppColors.primaryIndigo,
                               child: Icon(Icons.person, color: Colors.white)),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Dr. Sarah Jenkins',
-                                  style: TextStyle(
+                              Text(therapistName,
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16)),
-                              SizedBox(height: 4),
-                              Text('50 Min Therapy Consultation',
+                              const SizedBox(height: 4),
+                              const Text('50 Min Therapy Consultation',
                                   style: TextStyle(
                                       color: AppColors.textSecondaryLight,
                                       fontSize: 13)),
@@ -123,7 +134,7 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                   final newApt = {
                     'id': 'apt-${DateTime.now().millisecondsSinceEpoch}',
                     'clientName': displayName,
-                    'therapistName': 'Dr. Sarah Jenkins',
+                    'therapistName': therapistName,
                     'avatar': 'https://i.pravatar.cc/150?img=12',
                     'date': formattedDate,
                     'time': '$_selectedSlot ($formattedDate)',

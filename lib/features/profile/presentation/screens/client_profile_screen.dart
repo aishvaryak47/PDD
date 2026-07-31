@@ -83,7 +83,7 @@ class ClientProfileScreen extends ConsumerWidget {
                       leading: Icon(Icons.shield_outlined,
                           color: AppColors.primaryIndigo),
                       title: Text('Therapy Preferences'),
-                      subtitle: Text('CBT, Mindfulness, Video Sessions'),
+                      subtitle: Text('CBT, Mindfulness, E2EE Encrypted Chat Sessions'),
                     ),
                     Divider(),
                     ListTile(

@@ -18,17 +18,28 @@ class _TherapistRegisterScreenState extends ConsumerState<TherapistRegisterScree
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _titleController = TextEditingController(text: 'Licensed Clinical Psychologist');
+  final _titleController = TextEditingController(text: 'Licensed Clinical Specialist');
+  final _qualificationsController = TextEditingController(text: 'Psy.D in Clinical Psychology, Licensed CBT Specialist');
+  final _expController = TextEditingController(text: '8');
   final _bioController = TextEditingController();
 
   void _handleRegister() async {
     if (_formKey.currentState!.validate()) {
+      final quals = _qualificationsController.text
+          .split(',')
+          .map((q) => q.trim())
+          .where((q) => q.isNotEmpty)
+          .toList();
+      final expYears = int.tryParse(_expController.text.trim()) ?? 5;
+
       final success = await ref.read(authProvider.notifier).registerTherapist(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
         fullName: _nameController.text.trim(),
         title: _titleController.text.trim(),
         biography: _bioController.text.trim(),
+        qualifications: quals.isNotEmpty ? quals : ['Licensed Specialist'],
+        experienceYears: expYears,
       );
 
       if (success && mounted) {
@@ -57,7 +68,7 @@ class _TherapistRegisterScreenState extends ConsumerState<TherapistRegisterScree
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Provide your professional qualifications to accept clients.',
+                  'Provide your professional qualifications & experience to accept clients.',
                   style: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 const SizedBox(height: 30),
@@ -89,6 +100,23 @@ class _TherapistRegisterScreenState extends ConsumerState<TherapistRegisterScree
                   labelText: 'Professional Title',
                   prefixIcon: Icons.medical_information_outlined,
                   validator: (val) => val == null || val.isEmpty ? 'Title is required' : null,
+                ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  controller: _qualificationsController,
+                  labelText: 'Qualifications & Certifications (Comma separated)',
+                  prefixIcon: Icons.verified_outlined,
+                  hintText: 'e.g. Psy.D in Psychology, CBT Specialist',
+                  validator: (val) => val == null || val.isEmpty ? 'Qualifications are required' : null,
+                ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  controller: _expController,
+                  labelText: 'Years of Experience',
+                  prefixIcon: Icons.work_history_outlined,
+                  keyboardType: TextInputType.number,
+                  hintText: 'e.g. 8',
+                  validator: (val) => val == null || val.isEmpty ? 'Please enter years of experience' : null,
                 ),
                 const SizedBox(height: 20),
                 CustomTextField(

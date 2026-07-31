@@ -125,7 +125,7 @@ class _ClientManagementScreenState extends ConsumerState<ClientManagementScreen>
                                     ],
                                   ),
                                   const SizedBox(height: 12),
-                                  Text('Active Location: ${c.location} • ${c.distance}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryLight)),
+                                  Text('Active Location: ${c.location}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryLight)),
                                   const SizedBox(height: 8),
                                   Container(
                                     padding: const EdgeInsets.all(10),

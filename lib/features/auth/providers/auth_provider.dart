@@ -62,7 +62,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
                 ? (user.fullName.toLowerCase().startsWith('dr') ? user.fullName : 'Dr. ${user.fullName}')
                 : 'Dr. ${user.email.split('@')[0]}',
             title: 'Licensed Clinical Specialist',
-            distance: '0.8 km away',
             rate: '\$140 / hr',
             rating: 4.9,
             reviews: 18,
@@ -75,8 +74,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           ActiveClient(
             id: user.id,
             name: user.fullName.isNotEmpty ? user.fullName : user.email.split('@')[0],
-            distance: '0.5 mi away',
-            location: 'Nearby Client Location',
+            location: 'Active Client Location',
             requestedTopic: 'Anxiety & Stress Consultation',
             preferredTime: 'Flexible (Active Now)',
             isUrgent: false,
@@ -99,7 +97,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final displayName = isTherapist
           ? (formattedName.toLowerCase().startsWith('dr')
               ? formattedName
-              : 'Dr. ${formattedName.isNotEmpty ? formattedName : "Practitioner"}')
+              : 'Dr. ${formattedName.isNotEmpty ? formattedName : "Specialist"}')
           : (formattedName.isNotEmpty ? formattedName : 'Active Client');
 
       final userId = '${isTherapist ? "therapist" : "client"}-${DateTime.now().millisecondsSinceEpoch % 10000}';
@@ -124,7 +122,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
             id: userId,
             name: displayName,
             title: 'Licensed Clinical Specialist',
-            distance: '0.8 km away',
             rate: '\$140 / hr',
             rating: 5.0,
             reviews: 12,
@@ -137,7 +134,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
           ActiveClient(
             id: userId,
             name: displayName,
-            distance: '1.1 mi away',
             location: 'Active District',
             requestedTopic: 'CBT & Mental Health Support',
             preferredTime: 'Evening Slot',
@@ -179,7 +175,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         ActiveClient(
           id: user.id,
           name: fullName.isNotEmpty ? fullName : email,
-          distance: '0.8 mi away',
           location: 'Registered Client Location',
           requestedTopic: 'Personal Wellness Coaching',
           preferredTime: 'Immediate',
@@ -201,7 +196,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         ActiveClient(
           id: userId,
           name: fullName.isNotEmpty ? fullName : email,
-          distance: '0.8 mi away',
           location: 'Registered Client Location',
           requestedTopic: 'Personal Wellness Coaching',
           preferredTime: 'Immediate',
@@ -219,14 +213,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String fullName,
     required String title,
     required String biography,
+    List<String>? qualifications,
+    int experienceYears = 5,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
+    final qualList = (qualifications != null && qualifications.isNotEmpty)
+        ? qualifications
+        : ['Psy.D in Clinical Psychology', 'Licensed CBT Specialist'];
+
     try {
       final response = await ApiClient().dio.post(
         '/auth/register/therapist',
         data: {
           'user_in': {'email': email, 'password': password, 'full_name': fullName, 'role': 'therapist'},
-          'profile_in': {'title': title, 'biography': biography}
+          'profile_in': {
+            'title': title,
+            'biography': biography,
+            'qualifications': qualList,
+            'experience_years': experienceYears
+          }
         },
       );
       final token = response.data['access_token'];
@@ -245,7 +250,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           id: user.id,
           name: fullName.startsWith('Dr.') ? fullName : 'Dr. $fullName',
           title: title.isNotEmpty ? title : 'Licensed Specialist',
-          distance: '0.8 km away',
+          biography: biography.isNotEmpty ? biography : 'Licensed Clinical Therapist providing CBT & Anxiety consultations.',
+          qualifications: qualList,
+          experienceYears: experienceYears,
           rate: '\$150 / hr',
           rating: 5.0,
           reviews: 1,
@@ -270,7 +277,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           id: userId,
           name: fullName.startsWith('Dr.') ? fullName : 'Dr. $fullName',
           title: title.isNotEmpty ? title : 'Licensed Practitioner',
-          distance: '0.8 km away',
+          biography: biography.isNotEmpty ? biography : 'Licensed Clinical Therapist providing CBT & Anxiety consultations.',
+          qualifications: qualList,
+          experienceYears: experienceYears,
           rate: '\$150 / hr',
           rating: 5.0,
           reviews: 1,

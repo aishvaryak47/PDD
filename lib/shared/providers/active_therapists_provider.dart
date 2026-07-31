@@ -6,22 +6,28 @@ class ActiveTherapist {
   final String id;
   final String name;
   final String title;
-  final String distance;
   final String rate;
   final double rating;
   final int reviews;
   final String address;
+  final String biography;
+  final List<String> qualifications;
+  final int experienceYears;
+  final List<String> languages;
   final bool isOnline;
 
   ActiveTherapist({
     required this.id,
     required this.name,
     required this.title,
-    required this.distance,
     required this.rate,
     required this.rating,
     required this.reviews,
     required this.address,
+    this.biography = 'Licensed therapist providing professional Cognitive Behavioral Therapy (CBT), stress management, and emotional wellness consultations.',
+    this.qualifications = const ['Psy.D in Clinical Psychology', 'Licensed CBT Specialist'],
+    this.experienceYears = 8,
+    this.languages = const ['English', 'Spanish'],
     this.isOnline = true,
   });
 }
@@ -75,3 +81,4 @@ final activeTherapistsProvider =
     StateNotifierProvider<ActiveTherapistsNotifier, List<ActiveTherapist>>((ref) {
   return ActiveTherapistsNotifier();
 });
+

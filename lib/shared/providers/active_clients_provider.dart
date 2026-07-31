@@ -5,7 +5,6 @@ import '../services/psynova_sync_service.dart';
 class ActiveClient {
   final String id;
   final String name;
-  final String distance;
   final String location;
   final String requestedTopic;
   final bool isUrgent;
@@ -15,7 +14,6 @@ class ActiveClient {
   ActiveClient({
     required this.id,
     required this.name,
-    required this.distance,
     required this.location,
     required this.requestedTopic,
     this.isUrgent = false,

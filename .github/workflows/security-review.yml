@@ -11,6 +11,9 @@ jobs:
   security-scan:
     name: Backend Security Review & SAST/DAST Scan
     runs-on: ubuntu-latest
+    env:
+      TECH_STACK: ''
+      FRAMEWORK: ''
 
     steps:
       - name: Checkout Code Repository
