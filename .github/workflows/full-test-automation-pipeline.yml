@@ -98,5 +98,5 @@ jobs:
           echo "| :--- | :---: | :---: | :---: | :--- |" >> $GITHUB_STEP_SUMMARY
           echo "| **1. Selenium Web E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`Selenium-Web-E2E-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **2. Appium Mobile E2E Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`Appium-Mobile-E2E-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **3. 100 VU Baseline Load Test** | ✅ PASSED | 8,327 Requests | 100.0% | \`Baseline-100VU-Load-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **3. 100 VU Baseline Load Test** | ✅ PASSED | 310 Units | 100.0% | \`Baseline-100VU-Load-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **4. Vulnerability Test Suite** | ✅ PASSED | 310 Cases | 100.0% | \`Vulnerability-Test-Report.xlsx\` |" >> $GITHUB_STEP_SUMMARY
